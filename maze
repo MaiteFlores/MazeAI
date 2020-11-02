@@ -1,3 +1,5 @@
+##### Maite Flores 
+#### November 1, 2020
 import turtle
 import math
 import random
@@ -231,80 +233,132 @@ q_vals = np.zeros((table_rows, table_cols,4))
 ##        del memory[0]
 
 #
-maze = Maze(maze)
-hist = []
-##    free_cells = len(maze.empty)
-#win_percentage = 0.0
+def train_(maze):
 
-total_episodes = 50
-won_count = 0
-lost_count = 0
-for episode in range(total_episodes):
-    #lost = 0.0
-    runner_cell = (0,0)
+
+    maze = Maze(maze)
+    hist = []
+    win_count=0
+    game_amount=8
+    epoch_amount=300
+    episode_moves=0
+    epoch_moves=0
+    max_steps= 64
+    random_steps=0
+    epoch_random=0
+    #max_memory = 500
+
+    #experience = Experience(maze, max_memory=max_memory)
+
+    for epoch in range(epoch_amount):
+        for episode in range(game_amount):
+            
+            #if you want random start
+            #runner_cell = random.choice(maze.empty)
+            #maze.restart(runner_cell)
+            runner_cell = (0, 0)
+            maze.restart(runner_cell)
+            game_over = False
+
+            # get initial envstate (1d flattened canvas)
+            envstate = maze.check_state()
+
+        # n_episodes = 0
+            while not game_over:
+                valid_actions = maze.check_move()
+                if not valid_actions: break
+                #prev_envstate = envstate
+                action, random_steps = get_next_action(maze, q_vals, random_steps)
+            
+                old_x, old_y, mode = maze.state
+                # Apply action, get reward and new envstate
+                envstate, reward, game_status = maze.moves(action)
+                if game_status == 'Winner':
+                    win_count=win_count+1
+                    hist.append(1)
+                    game_over = True
+                elif episode_moves >= max_steps:
+                    hist.append(0)
+                    game_over = True
+                elif game_status == 'Lost':
+                    hist.append(0)
+                    game_over = True
+                else:
+                    game_over = False
+
+                new_x, new_y, mode = maze.state
+                # Store episode (experience)
+                old_q_val = q_vals[old_x, old_y, action]
+                temp = reward + (discount * np.max(q_vals[new_x, new_y])) - old_q_val
+                new_q_val = old_q_val + (learning_rate * temp)
+                q_vals[old_x, old_y, action] = new_q_val
+
+            
+            # n_episodes += 1
+                episode_moves=episode_moves+1
+                #create_maze(maze)
+
+            epoch_moves=epoch_moves+episode_moves
+            epoch_random=epoch_random+random_steps
+            episode_moves=0
+            random_steps=0
+            
+            #print("Trained")
+            #create_maze(maze)
+        print("Epoch: ",epoch+1,"/",epoch_amount,"    |   Win rate: ", win_count/game_amount, "   |   Average steps: ", epoch_moves/game_amount, "  |   Average random steps: ", epoch_random/game_amount)
+        win_count=0
+        epoch_moves=0
+        epoch_random=0
+
+def get_next_action(maze, q_vals, random_steps):
+    valid_actions = maze.check_move()
+    # Get next action
+    if np.random.rand() > epsilon:
+        action = random.choice(valid_actions)
+        random_steps=random_steps+1
+    else:
+        cur_x, cur_y, mode = maze.state
+        action = np.argmax(q_vals[cur_x, cur_y])
+    return action, random_steps
+        
+
+def get_shortest_path(maze):
+    train_(maze)
+    maze = Maze(maze)
+    runner_cell = (0, 0)
     maze.restart(runner_cell)
     game_over = False
 
     # get initial envstate (1d flattened canvas)
     envstate = maze.check_state()
+    _moves =0
 
-    n_episodes = 0
+# n_episodes = 0
     while not game_over:
         valid_actions = maze.check_move()
-        #old_x, old_y, mode = maze.state
         if not valid_actions: break
-        prev_envstate = envstate
-        # Get next action
-        if np.random.rand() > epsilon:
-##                cur_x, cur_y, mode = maze.state
-##                action = np.argmax(q_vals[cur_x, cur_y])
-            action = random.choice(valid_actions)
-        else:
-##                 action = random.choice(dif_actions)
-##                action = random.choice(valid_actions)
-            cur_x, cur_y, mode = maze.state
-            action = np.argmax(q_vals[cur_x, cur_y])
-        
-        old_x, old_y, mode = maze.state
+        #prev_envstate = envstate
+        cur_x, cur_y, mode = maze.state
+        action = np.argmax(q_vals[cur_x, cur_y])
+    
         # Apply action, get reward and new envstate
         envstate, reward, game_status = maze.moves(action)
         if game_status == 'Winner':
-            hist.append(1)
-            won_count = won_count+1
-            print("Won")
+            print("Win!")
             game_over = True
         elif game_status == 'Lost':
-            hist.append(0)
-            lost_count = lost_count+1
-            print("Lost")
+            print("Loser!")
             game_over = True
         else:
             game_over = False
 
-        new_x, new_y, mode = maze.state
-        # Store episode (experience)
-        old_q_val = q_vals[old_x, old_y, action]
-        temp = reward + (discount * np.max(q_vals[new_x, new_y])) - old_q_val
-        new_q_val = old_q_val + (learning_rate * temp)
-        q_vals[old_x, old_y, action] = new_q_val
-        
-        n_episodes += 1
+        _moves=_moves+1
+        create_maze(maze)
+    
+    #create_maze(maze)
+    print("Steps: ", _moves)
 
-        
-    #print("Trained")
-
-    create_maze(maze)
-##    plt.pause(3)
-##    plt.close()
-
-total_won = won_count/total_episodes
-total_lost = lost_count/total_episodes
-
-print("Percentage won:",total_won)
-print("Percentage lost:",total_lost)
-
-##### ignore everything from here down ########## ##### ignore everything from here down ########## ##### ignore everything from here down ##########
-
+get_shortest_path(maze)
 ##def get_next_action(current_row_index, current_column_index, epsilon):
 ##  #if a randomly chosen value between 0 and 1 is less than epsilon, 
 ##  #then choose the most promising value from the Q-table for this state.
@@ -337,7 +391,14 @@ print("Percentage lost:",total_lost)
 ##    return shortest_path
     
     
-   
+    
+
+
+
+
+
+    
+
 #train_please(show)
 #get_shortest_path(maze)
 #pic, reward, game_over = show.moves(2)
