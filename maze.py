@@ -169,8 +169,8 @@ class Maze(object):
 
 maze =[
     [ 1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  0.0,  1.0,  1.0,  1.0,  0.0,  1.0,  1.0],
-    [ 1.0,  1.0,  1.0,  1.0,  0.0,  1.0,  0.0,  1.0],
+    [ 1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0],
+    [ 1.0,  0.0,  1.0,  1.0,  0.0,  0.0,  0.0,  1.0],
     [ 1.0,  1.0,  1.0,  0.0,  1.0,  1.0,  1.0,  1.0],
     [ 1.0,  1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0],
     [ 1.0,  1.0,  1.0,  0.0,  1.0,  0.0,  0.0,  0.0],
@@ -234,9 +234,7 @@ q_vals = np.zeros((table_rows, table_cols,4))
 
 #
 def train_(maze):
-
-
-    maze = Maze(maze)
+    #maze = Maze(maze)
     hist = []
     win_count=0
     game_amount=8
@@ -324,14 +322,14 @@ def get_next_action(maze, q_vals, random_steps):
 
 def get_shortest_path(maze):
     train_(maze)
-    maze = Maze(maze)
+    #maze = Maze(maze)
     runner_cell = (0, 0)
     maze.restart(runner_cell)
     game_over = False
 
-    # get initial envstate (1d flattened canvas)
+    total_reward = 0; 
     envstate = maze.check_state()
-    _moves =0
+    #_moves =0
 
 # n_episodes = 0
     while not game_over:
@@ -343,6 +341,8 @@ def get_shortest_path(maze):
     
         # Apply action, get reward and new envstate
         envstate, reward, game_status = maze.moves(action)
+        print("Reward: ", reward, "Total: ", total_reward)
+        total_reward = total_reward + reward;
         if game_status == 'Winner':
             print("Win!")
             game_over = True
@@ -352,12 +352,14 @@ def get_shortest_path(maze):
         else:
             game_over = False
 
-        _moves=_moves+1
+        #_moves=_moves+1
         create_maze(maze)
     
     #create_maze(maze)
-    print("Steps: ", _moves)
+    #print("Steps: ", _moves)
+    #print(total_reward)
 
+maze = Maze(maze);
 get_shortest_path(maze)
 ##def get_next_action(current_row_index, current_column_index, epsilon):
 ##  #if a randomly chosen value between 0 and 1 is less than epsilon, 
