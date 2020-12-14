@@ -252,8 +252,8 @@ def train_(maze):
 
     # n_episodes = 0
         while not game_over:
-            valid_actions = maze.check_move()
-            if not valid_actions: break
+            #valid_actions = maze.check_move()
+            #if not valid_actions: break
             #prev_envstate = envstate
             action = get_next_action(maze, q_vals)
         
