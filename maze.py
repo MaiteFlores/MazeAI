@@ -108,9 +108,10 @@ class Maze(object):
         return 'Playing'
         
     def check_move(self,cell = NONE):
-
+          # if no position is passed take the position of the mouse's state
         if cell is NONE:
             cur_xcor, cur_ycor, mode = self.state
+         # takes the position passed
         else:
             cur_xcor, cur_ycor = cell
 
