@@ -1,5 +1,6 @@
-##### Maite Flores 
-#### November 1, 2020
+##Maite Flores 
+##Nov. 2020
+
 import turtle
 import math
 import random
@@ -80,16 +81,16 @@ class Maze(object):
     def moves(self, decision):
         self.change_state(decision)
         score = self.reward()
-        maze_state = self.check_state()
+       # maze_state = self.check_state()
         self.final_reward += score
         check_is_over = self.is_over()
-        return maze_state,score, check_is_over
+        return score, check_is_over
 
     #gets reward
     def reward(self):
         runner_xcor, runner_ycor, mode = self.state
         new_xcor,new_ycor = self._maze.shape
-        if runner_xcor == new_xcor-1 and runner_ycor == new_ycor-1:
+        if (runner_xcor,runner_ycor) == self.goal:
             return 10.00
         if mode == 'barrier':
             return self.min_reward -0.50
@@ -97,13 +98,13 @@ class Maze(object):
             return -0.1
         if mode == 'stop':
             return -0.25
-        if (runner_xcor, runner_ycor) in visited_square:
+        if (runner_xcor, runner_ycor) in self.visited_square:
             return -0.20
 
-    def check_state(self):
-        pic = self.create()
-        maze_state = pic.reshape((1,-1))
-        return maze_state
+    # def check_state(self):
+    #     pic = self.create()
+    #     maze_state = pic.reshape((1,-1))
+    #     return maze_state
 
     #checks state of playing 
     def is_over(self):
@@ -168,14 +169,26 @@ class Maze(object):
            
 
 maze =[
-    [ 1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  0.0,  1.0,  1.0,  0.0,  0.0,  0.0,  1.0],
-    [ 1.0,  1.0,  1.0,  0.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  1.0,  1.0,  0.0,  1.0,  0.0,  0.0,  0.0],
-    [ 1.0,  1.0,  1.0,  0.0,  1.0,  1.0,  1.0,  1.0],
-    [ 1.0,  1.0,  1.0,  1.0,  0.0,  1.0,  1.0,  1.0]
+[ 1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1.,  1., 1.,  0.,  1.,  1.,  0.,  1.,  1.,  1.,  1.,  1.],
+[ 1.,  0.,  1.,  0.,  1.,  1.,  1.,  1.,  1.,  1., 1.,  1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.],
+[ 0.,  0.,  1.,  0.,  1.,  1.,  1.,  1.,  0.,  1., 0.,  0.,  0.,  1.,  1.,  1.,  0.,  1.,  0.,  1.],
+[ 1.,  1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1., 0.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  0.,  1.],
+[ 1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.,  1., 0.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.],
+[ 1.,  1.,  1.,  0.,  0.,  1.,  1.,  1.,  1.,  1., 1.,  1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  1.,  1.,  0.,  1.,  0.,  1., 1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  1.,  1.,  0.,  0.,  1.,  0., 1.,  0.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  0.],
+[ 0.,  1.,  1.,  0.,  1.,  0.,  1.,  1.,  1.,  1., 0.,  1.,  1.,  1.,  1.,  1.,  0.,  0.,  0.,  1.],
+[ 1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1., 1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1.],
+[ 1.,  1.,  0.,  0.,  0.,  1.,  0.,  1.,  1.,  0., 1.,  1.,  1.,  1.,  0.,  1.,  1.,  0.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1., 0.,  1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  1.,  0.,  0.,  1.,  1.,  0., 1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  0.,  1.,  0.,  1.,  1.,  1., 1.,  1.,  0.,  1.,  0.,  1.,  1.,  0.,  0.,  1.],
+[ 1.,  1.,  1.,  1.,  0.,  1.,  0.,  1.,  1.,  1., 1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1.],
+[ 1.,  1.,  1.,  0.,  1.,  1.,  1.,  0.,  1.,  1., 0.,  1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.],
+[ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  0., 1.,  1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  0.],
+[ 1.,  1.,  0.,  1.,  1.,  0.,  1.,  1.,  0.,  1., 1.,  1.,  1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.],
+[ 1.,  0.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1., 1.,  1.,  1.,  1.,  0.,  1.,  0.,  1.,  1.,  1.],
+[ 0.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1., 1.,  1.,  1.,  1.,  1.,  0.,  1.,  1.,  1.,  1.]
 ]
 
 
@@ -195,9 +208,9 @@ def create_maze(maze):
         pic[row,col] = 0.6
     runner_xcor, runner_ycor, runner_mode = maze.state
     pic[runner_xcor, runner_ycor] = 0.3   #runner
-    pic[x-1, y-1] = 0.9 # finish line
+    pic[x-1, y-1] = 0.7 # finish line
             
-    axis.set_title("The Maze")
+    axis.set_title("Regular Maze")
     
     img = plt.imshow(pic,interpolation='none',cmap = 'gray')
     #fig.tight_layout()
@@ -213,8 +226,8 @@ def create_maze(maze):
 
 
 ##########################################################################################
-table_rows = 8
-table_cols = 8
+table_rows = 20
+table_cols = 20
 ##
 ##q_vals = np.zeros((table_rows, table_cols, 4))
 
@@ -233,91 +246,74 @@ q_vals = np.zeros((table_rows, table_cols,4))
 ##        del memory[0]
 
 #
+def updateQ(old_x, old_y, new_x, new_y, action, reward):
+    old_q_val = q_vals[old_x, old_y, action]
+    temp = reward + (discount * np.max(q_vals[new_x, new_y])) - old_q_val
+    new_q_val = old_q_val + (learning_rate * temp)
+    q_vals[old_x, old_y, action] = new_q_val 
+
+
+
 def train_(maze):
-    #maze = Maze(maze)
-    hist = []
     win_count=0
-    game_amount=8
-    epoch_amount=300
+    epoch_amount=4500
     episode_moves=0
-    epoch_moves=0
     max_steps= 64
-    random_steps=0
-    epoch_random=0
-    #max_memory = 500
 
     #experience = Experience(maze, max_memory=max_memory)
 
     for epoch in range(epoch_amount):
-        for episode in range(game_amount):
+        #for episode in range(game_amount):
             
-            #if you want random start
-            #runner_cell = random.choice(maze.empty)
-            #maze.restart(runner_cell)
-            runner_cell = (0, 0)
-            maze.restart(runner_cell)
-            game_over = False
+        #if you want random start
+        #runner_cell = random.choice(maze.empty)
+        #maze.restart(runner_cell)
+        runner_cell = (0, 0)
+        maze.restart(runner_cell)
+        game_over = False
 
-            # get initial envstate (1d flattened canvas)
-            envstate = maze.check_state()
+        # get initial envstate (1d flattened canvas)
+        #envstate = maze.check_state()
 
-        # n_episodes = 0
-            while not game_over:
-                valid_actions = maze.check_move()
-                if not valid_actions: break
-                #prev_envstate = envstate
-                action, random_steps = get_next_action(maze, q_vals, random_steps)
-            
-                old_x, old_y, mode = maze.state
-                # Apply action, get reward and new envstate
-                envstate, reward, game_status = maze.moves(action)
-                if game_status == 'Winner':
-                    win_count=win_count+1
-                    hist.append(1)
-                    game_over = True
-                elif episode_moves >= max_steps:
-                    hist.append(0)
-                    game_over = True
-                elif game_status == 'Lost':
-                    hist.append(0)
-                    game_over = True
-                else:
-                    game_over = False
+    # n_episodes = 0
+        while not game_over:
+            valid_actions = maze.check_move()
+            if not valid_actions: break
+            #prev_envstate = envstate
+            action = get_next_action(maze, q_vals)
+        
+            old_x, old_y, mode = maze.state
+            # Apply action, get reward and new envstate
+            reward, game_status = maze.moves(action)
+            if game_status == 'Winner':
+                win_count=win_count+1
+                game_over = True
+            elif episode_moves >= max_steps:
+                game_over = True
+            elif game_status == 'Lost':
+                game_over = True
+            else:
+                game_over = False
 
-                new_x, new_y, mode = maze.state
-                # Store episode (experience)
-                old_q_val = q_vals[old_x, old_y, action]
-                temp = reward + (discount * np.max(q_vals[new_x, new_y])) - old_q_val
-                new_q_val = old_q_val + (learning_rate * temp)
-                q_vals[old_x, old_y, action] = new_q_val
+            new_x, new_y, mode = maze.state
+            updateQ(old_x, old_y, new_x, new_y, action, reward)
+        
+        print("Training Cycle: ",epoch+1,"/",epoch_amount)
+  
 
-            
-            # n_episodes += 1
-                episode_moves=episode_moves+1
-                #create_maze(maze)
+    
 
-            epoch_moves=epoch_moves+episode_moves
-            epoch_random=epoch_random+random_steps
-            episode_moves=0
-            random_steps=0
-            
-            #print("Trained")
-            #create_maze(maze)
-        print("Epoch: ",epoch+1,"/",epoch_amount,"    |   Win rate: ", win_count/game_amount, "   |   Average steps: ", epoch_moves/game_amount, "  |   Average random steps: ", epoch_random/game_amount)
-        win_count=0
-        epoch_moves=0
-        epoch_random=0
+def get_next_action(maze, q_vals):
 
-def get_next_action(maze, q_vals, random_steps):
-    valid_actions = maze.check_move()
     # Get next action
     if np.random.rand() > epsilon:
+        valid_actions = maze.check_move()
         action = random.choice(valid_actions)
-        random_steps=random_steps+1
+
     else:
         cur_x, cur_y, mode = maze.state
         action = np.argmax(q_vals[cur_x, cur_y])
-    return action, random_steps
+    return action
         
 
 def get_shortest_path(maze):
@@ -328,7 +324,7 @@ def get_shortest_path(maze):
     game_over = False
 
     total_reward = 0; 
-    envstate = maze.check_state()
+    #envstate = maze.check_state()
     #_moves =0
 
 # n_episodes = 0
@@ -340,9 +336,9 @@ def get_shortest_path(maze):
         action = np.argmax(q_vals[cur_x, cur_y])
     
         # Apply action, get reward and new envstate
-        envstate, reward, game_status = maze.moves(action)
-        print("Reward: ", reward, "Total: ", total_reward)
-        total_reward = total_reward + reward;
+        reward, game_status = maze.moves(action)
+        #print("Reward: ", reward, "Total: ", total_reward)
+        total_reward = total_reward + reward
         if game_status == 'Winner':
             print("Win!")
             game_over = True
@@ -357,10 +353,13 @@ def get_shortest_path(maze):
     
     #create_maze(maze)
     #print("Steps: ", _moves)
-    #print(total_reward)
 
-maze = Maze(maze);
+    print("Final score: ",total_reward)
+
+maze = Maze(maze)
 get_shortest_path(maze)
+
+
 ##def get_next_action(current_row_index, current_column_index, epsilon):
 ##  #if a randomly chosen value between 0 and 1 is less than epsilon, 
 ##  #then choose the most promising value from the Q-table for this state.
