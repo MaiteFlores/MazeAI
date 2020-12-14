@@ -32,7 +32,6 @@ class Maze(object):
         self.goal = (x-1,y-1)
         self.empty =[(r,c) for r in range(x) for c in range(y) if self._maze[r,c] == 1.0]
         self.border = [[(r,c) for r in range(x) for c in range(y) if self._maze[r,c] == 0.0]]
-        #self.empty.remove(self.goal)
         #self.visited_square = []
         self.restart(runner)
 
@@ -81,7 +80,6 @@ class Maze(object):
     def moves(self, decision):
         self.change_state(decision)
         score = self.reward()
-       # maze_state = self.check_state()
         self.final_reward += score
         check_is_over = self.is_over()
         return score, check_is_over
@@ -101,38 +99,15 @@ class Maze(object):
         if (runner_xcor, runner_ycor) in self.visited_square:
             return -0.20
 
-    # def check_state(self):
-    #     pic = self.create()
-    #     maze_state = pic.reshape((1,-1))
-    #     return maze_state
-
     #checks state of playing 
     def is_over(self):
         if self.final_reward < self.min_reward:
             return 'Lost'
         runner_xcor,runner_ycor, mode = self.state
-        x_axis,y_axis = self._maze.shape
-        if runner_xcor == x_axis-1 and runner_ycor == y_axis-1:
+        if (runner_xcor,runner_ycor) == self.goal:
             return 'Winner'
         return 'Playing'
         
-        
-    # creates the environment 
-    def create(self):
-        x, y = self._maze.shape
-        pic = np.copy(self._maze)
-
-        for i in range (x):
-            for j in range (y):
-                if pic[i,j] > 0.0:
-                    #print(x)
-                    pic[i,j] = 1.0
-        #place runner
-        run_x,run_y,running = self.state
-        pic[run_x,run_y] = player
-
-        return pic
-
     def check_move(self,cell = NONE):
 
         if cell is NONE:
