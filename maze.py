@@ -233,7 +233,7 @@ def train_(maze):
     win_count=0
     epoch_amount=4500
     episode_moves=0
-    max_steps= 64
+
 
     #experience = Experience(maze, max_memory=max_memory)
 
@@ -262,8 +262,6 @@ def train_(maze):
             reward, game_status = maze.moves(action)
             if game_status == 'Winner':
                 win_count=win_count+1
-                game_over = True
-            elif episode_moves >= max_steps:
                 game_over = True
             elif game_status == 'Lost':
                 game_over = True
