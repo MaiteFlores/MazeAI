@@ -30,8 +30,7 @@ class Maze(object):
         self._maze = np.array(maze)
         x,y = self._maze.shape
         self.goal = (x-1,y-1)
-        self.empty =[(r,c) for r in range(x) for c in range(y) if self._maze[r,c] == 1.0]
-        self.border = [[(r,c) for r in range(x) for c in range(y) if self._maze[r,c] == 0.0]]
+        #self.border = [[(r,c) for r in range(x) for c in range(y) if self._maze[r,c] == 0.0]]
         #self.visited_square = []
         self.restart(runner)
 
@@ -335,44 +334,7 @@ maze = Maze(maze)
 get_shortest_path(maze)
 
 
-##def get_next_action(current_row_index, current_column_index, epsilon):
-##  #if a randomly chosen value between 0 and 1 is less than epsilon, 
-##  #then choose the most promising value from the Q-table for this state.
-##  if np.random.random() < epsilon:
-##    return np.argmax(q_vals[current_row_index, current_column_index])
-##  else: #choose a random action
-##    return random.choice(dif_actions)
-##
-##def get_shortest_path(maze):
-##  #return immediately if this is an invalid starting location
-##  cur_x,cur_y, mode = maze.state
-##  x,y = maze._maze.shape 
-##  if cur_x == x-1 and cur_y == y-1:
-##    is_terminal_state = True
-##    return []
-##  else: #if this is a 'legal' starting location
-##    #current_row_index, current_column_index = start_row_index, start_column_index
-##    is_terminal_state = False
-##    shortest_path = []
-##    shortest_path.append([cur_x, cur_y])
-##    #continue moving along the path until we reach the goal (i.e., the item packaging location)
-##    while not is_terminal_state:
-##      #get the best action to take
-##      action_index = get_next_action(cur_x, cur_y, 1.)
-##      #move to the next location on the path, and add the new location to the list
-##      #cur_x, cur_y = get_next_location(current_row_index, current_column_index, action_index)
-##      maze.moves(action_index)
-##      cur_x,cur_y, mode = maze.state
-##      shortest_path.append([cur_x, cur_y])
-##    return shortest_path
-    
-    
-    
-
-
-
-
-
+   
     
 
 #train_please(show)
